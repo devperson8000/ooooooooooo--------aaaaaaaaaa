@@ -1,0 +1,22 @@
+services:
+  desktop:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: orbit-desktop
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Etc/UTC
+      CUSTOM_USER: ${CUSTOM_USER:?Set CUSTOM_USER in .env}
+      PASSWORD: ${PASSWORD:?Set PASSWORD in .env}
+      TITLE: Orbit Linux
+    volumes:
+      - orbit-config:/config
+    ports:
+      - "3000:3000"
+    shm_size: 1gb
+    restart: unless-stopped
+
+volumes:
+  orbit-config:
