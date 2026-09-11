@@ -3,8 +3,20 @@ FROM lscr.io/linuxserver/webtop:ubuntu-mate
 LABEL org.opencontainers.image.title="Orbit Cloud Desktop" \
       org.opencontainers.image.description="Low-memory Ubuntu MATE desktop streamed with Selkies"
 
-RUN mv /usr/bin/chromium-browser /usr/bin/chromium-browser.real
-COPY --chmod=755 scripts/chromium-low-memory /usr/bin/chromium-browser
+COPY --chmod=755 scripts/chromium-low-memory /usr/local/bin/orbit-browser-wrapper
+RUN set -eu; \
+    browser_path=""; \
+    for candidate in /usr/bin/chromium-browser /usr/bin/chromium /usr/bin/google-chrome /usr/bin/google-chrome-stable; do \
+      if [ -e "$candidate" ] || [ -L "$candidate" ]; then browser_path="$candidate"; break; fi; \
+    done; \
+    if [ -n "$browser_path" ]; then \
+      mv "$browser_path" "$browser_path.real"; \
+      printf '%s\n' "$browser_path.real" > /usr/local/share/orbit-browser-real; \
+      ln -s /usr/local/bin/orbit-browser-wrapper "$browser_path"; \
+      echo "Installed low-memory wrapper for $browser_path"; \
+    else \
+      echo "No Chromium-compatible browser found; keeping the image default browser"; \
+    fi
 
 ENV TZ=Etc/UTC \
     TITLE="Orbit Linux" \
