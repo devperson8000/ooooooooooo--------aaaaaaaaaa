@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080b12" />
+    <meta name="description" content="A private Linux desktop streamed securely from the cloud." />
+    <title>Orbit — Cloud Linux</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Orbit home">
+          <span class="brand-mark"><span></span></span>
+          <span>orbit</span>
+        </a>
+        <div class="top-actions">
+          <div class="status-pill" id="statusPill">
+            <span class="status-dot"></span>
+            <span id="statusText">Checking host</span>
+          </div>
+          <button class="icon-button" id="settingsButton" aria-label="Connection settings" title="Connection settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V20h-2v-.08a1.7 1.7 0 0 0-1.1-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.42-1.42.06-.06A1.7 1.7 0 0 0 9.34 15a1.7 1.7 0 0 0-1.56-1.04H7.7v-2h.08a1.7 1.7 0 0 0 1.56-1.1A1.7 1.7 0 0 0 9 8.98l-.06-.06 1.42-1.42.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56v-.08h2v.08a1.7 1.7 0 0 0 1.1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06a1.7 1.7 0 0 0-.34 1.88c.25.64.86 1.06 1.56 1.06H21v2h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="hero" id="hero">
+        <div class="eyebrow"><span></span>REMOTE WORKSTATION</div>
+        <h1>Your Linux machine.<br /><em>Anywhere.</em></h1>
+        <p>A full Ubuntu desktop streamed from your private cloud host. Your browser only displays the session—every application runs remotely.</p>
+        <div class="hero-actions">
+          <button class="primary-button" id="connectButton">
+            <span>Launch desktop</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+          <button class="secondary-button" id="newTabButton">Open in new tab</button>
+        </div>
+
+        <div class="feature-grid">
+          <article><span class="feature-icon violet">⌘</span><div><strong>Full desktop</strong><small>Ubuntu + XFCE</small></div></article>
+          <article><span class="feature-icon blue">◈</span><div><strong>Cloud powered</strong><small>Nothing runs locally</small></div></article>
+          <article><span class="feature-icon green">●</span><div><strong>Gamepad ready</strong><small>Up to 4 controllers</small></div></article>
+        </div>
+      </section>
+
+      <section class="viewer" id="viewer" aria-hidden="true">
+        <div class="viewer-toolbar">
+          <div class="viewer-title"><span class="live-dot"></span><strong>Ubuntu Desktop</strong><small id="hostLabel">remote session</small></div>
+          <div class="viewer-actions">
+            <button class="toolbar-button" id="reloadButton" title="Reload session">↻</button>
+            <button class="toolbar-button" id="fullscreenButton" title="Fullscreen">⛶</button>
+            <button class="toolbar-button close" id="closeButton" title="Close session">×</button>
+          </div>
+        </div>
+        <div class="frame-wrap" id="frameWrap">
+          <div class="loader" id="loader"><span></span><p>Connecting to your cloud desktop…</p></div>
+          <iframe id="desktopFrame" title="Remote Linux desktop" allow="clipboard-read; clipboard-write; fullscreen; gamepad; microphone" referrerpolicy="no-referrer"></iframe>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="settingsDialog">
+      <form method="dialog" id="settingsForm">
+        <div class="dialog-head"><div><span>Connection</span><h2>Desktop host</h2></div><button value="cancel" class="dialog-close" aria-label="Close">×</button></div>
+        <p>Paste the public HTTPS URL from your remote Docker host. This address is stored only in this browser unless configured in Vercel.</p>
+        <label for="hostInput">REMOTE DESKTOP URL</label>
+        <input id="hostInput" type="url" inputmode="url" placeholder="https://your-host.example.com" autocomplete="url" />
+        <div class="input-error" id="inputError"></div>
+        <div class="dialog-actions"><button value="cancel" class="secondary-button">Cancel</button><button value="default" class="primary-button" id="saveButton">Save host</button></div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
