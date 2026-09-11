@@ -1,20 +1,9 @@
 #!/bin/bash
 set -e
 
-BIN=/usr/lib/chromium/chromium-launcher.sh
-export GTK_THEME=Adwaita:light
 export MALLOC_ARENA_MAX=2
 
-if ! pgrep chromium >/dev/null 2>&1; then
-  rm -f "$HOME"/.config/chromium/Singleton*
-fi
-
-exec "$BIN" \
-  --no-first-run \
-  --no-default-browser-check \
-  --password-store=basic \
-  --no-sandbox \
-  --test-type \
+exec /usr/bin/chromium-browser.real \
   --disable-dev-shm-usage \
   --disable-gpu \
   --disable-extensions \
