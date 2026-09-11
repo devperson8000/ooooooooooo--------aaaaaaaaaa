@@ -1,18 +1,18 @@
 # Orbit Cloud Linux
 
-A polished browser portal for a **remotely hosted Ubuntu XFCE desktop**. The frontend deploys to Vercel; Linux and every desktop application run inside a separate Docker host.
+A polished browser portal for a **remotely hosted Ubuntu MATE desktop**. The frontend deploys to Vercel; Linux and every desktop application run inside a separate Docker host.
 
 ## Architecture
 
 - **Vercel:** static portal and a tiny configuration endpoint.
-- **Remote Docker host:** Ubuntu XFCE via LinuxServer Webtop/Selkies.
+- **Remote Docker host:** Ubuntu MATE via LinuxServer Webtop/Selkies.
 - **Browser:** receives the desktop stream and sends keyboard, mouse, audio, and controller input.
 
 This is not a VM running inside Vercel or inside the visitor's browser.
 
 ## 1. Deploy the Linux desktop
 
-Create a service on a Docker-capable host from this repository. Railway can use the included `railway.json` and `remote/Dockerfile` automatically.
+Create a service on a Docker-capable host from this repository. Railway can use the included the root `Dockerfile` automatically.
 
 Set these environment variables on the remote service:
 
