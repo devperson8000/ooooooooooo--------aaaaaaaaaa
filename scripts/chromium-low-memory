@@ -2,8 +2,9 @@
 set -e
 
 export MALLOC_ARENA_MAX=2
+REAL_BROWSER="$(cat /usr/local/share/orbit-browser-real)"
 
-exec /usr/bin/chromium-browser.real \
+exec "$REAL_BROWSER" \
   --disable-dev-shm-usage \
   --disable-gpu \
   --disable-extensions \
