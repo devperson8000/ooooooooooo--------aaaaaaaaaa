@@ -1,34 +1,47 @@
-# Browser Linux VM
+# Orbit Cloud Linux
 
-A polished, browser-accessible Alpine Linux virtual machine powered by the [v86](https://github.com/copy/v86) x86 emulator.
+A polished browser portal for a **remotely hosted Ubuntu XFCE desktop**. The frontend deploys to Vercel; Linux and every desktop application run inside a separate Docker host.
 
-## What it is
+## Architecture
 
-Vercel cannot host a traditional always-running VM. This project instead boots a real Alpine Linux x86 guest inside each visitor's browser. The Vercel deployment is only the static host; CPU, memory, and VM state stay on the visitor's device.
+- **Vercel:** static portal and a tiny configuration endpoint.
+- **Remote Docker host:** Ubuntu XFCE via LinuxServer Webtop/Selkies.
+- **Browser:** receives the desktop stream and sends keyboard, mouse, audio, and controller input.
 
-## Deploy on Vercel
+This is not a VM running inside Vercel or inside the visitor's browser.
 
-1. Import this GitHub repository into Vercel.
-2. Keep **Framework Preset** set to **Other**.
-3. Leave build and output settings empty.
-4. Deploy.
+## 1. Deploy the Linux desktop
 
-No environment variables are required.
+Create a service on a Docker-capable host from this repository. Railway can use the included `railway.json` and `remote/Dockerfile` automatically.
 
-## Controls
+Set these environment variables on the remote service:
 
-- **Start / Pause** controls CPU execution.
-- **Restart** performs a VM reboot.
-- **Save** stores a snapshot in the browser.
-- **Restore** loads that saved snapshot.
-- **Fullscreen** expands the VM display.
-- Click inside the display before typing.
+```text
+CUSTOM_USER=choose-a-username
+PASSWORD=choose-a-long-random-password
+TZ=Australia/Sydney
+```
 
-The first boot downloads the emulator, BIOS, and Alpine image, so it can take a moment. Saved snapshots are local to the current browser and device.
+Attach persistent storage at `/config`, allocate at least 2 GB RAM, and expose internal port `3000` through the host's HTTPS domain. For smoother desktop use, 4 GB RAM or more is recommended. GPU-backed gaming requires a host that supports GPU passthrough; ordinary cloud containers are intended only for lightweight games.
 
-## Limitations
+## 2. Deploy the portal to Vercel
 
-- VM data is not automatically persistent between browsers or devices.
-- Public deployments let anyone with the domain start their own isolated VM.
-- Network availability inside the guest depends on browser and v86 networking support.
-- This is suited to learning, demos, and temporary shell sessions—not production hosting.
+Import this repository into Vercel and add:
+
+```text
+REMOTE_DESKTOP_URL=https://your-remote-desktop-host.example.com
+```
+
+Redeploy after saving the variable. The portal can also accept a host URL from its settings panel and stores that address in the current browser.
+
+## Security
+
+Do not expose the remote desktop without authentication. `CUSTOM_USER` and `PASSWORD` enable the image's built-in login, but an Internet-facing production desktop should also sit behind strong access control supplied by the hosting platform or a trusted identity-aware reverse proxy. Never commit credentials to this repository.
+
+## Gaming
+
+Selkies supports browser audio, microphone, and up to four gamepads. Lightweight games can use CPU rendering. Modern 3D games need a GPU-enabled Linux host, compatible drivers, GPU passthrough, and enough network bandwidth; Vercel does not provide that compute.
+
+## Local validation (optional)
+
+Nothing needs to run locally for deployment. Maintainers who want to validate the files can run `npm install && npm run check`; the Linux desktop itself still belongs on the remote Docker service.
