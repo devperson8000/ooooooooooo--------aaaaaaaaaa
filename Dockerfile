@@ -9,5 +9,3 @@ ENV TZ=Etc/UTC \
     PGID=1000
 
 EXPOSE 3000
-
-VOLUME ["/config"]
