@@ -1,20 +1,13 @@
-FROM node:22-alpine AS dependencies
-WORKDIR /app
-RUN apk add --no-cache python3 make g++
-COPY package.json ./
-RUN npm install --omit=dev
+FROM lscr.io/linuxserver/webtop:ubuntu-xfce
 
-FROM node:22-alpine
-RUN apk add --no-cache bash coreutils curl git nano openssh-client python3 \
-    && addgroup -S terminal \
-    && adduser -S -G terminal -h /workspace -s /bin/bash terminal \
-    && mkdir -p /workspace \
-    && chown -R terminal:terminal /workspace
-WORKDIR /app
-COPY --from=dependencies /app/node_modules ./node_modules
-COPY --chown=terminal:terminal . .
-USER terminal
-ENV NODE_ENV=production
-ENV PORT=3000
+LABEL org.opencontainers.image.title="Orbit Cloud Desktop" \
+      org.opencontainers.image.description="Remote Ubuntu XFCE desktop streamed with Selkies"
+
+ENV TZ=Etc/UTC \
+    TITLE="Orbit Linux" \
+    PUID=1000 \
+    PGID=1000
+
 EXPOSE 3000
-CMD ["node", "server/index.js"]
+
+VOLUME ["/config"]
