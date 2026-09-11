@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+BIN=/usr/lib/chromium/chromium-launcher.sh
+export GTK_THEME=Adwaita:light
+export MALLOC_ARENA_MAX=2
+
+if ! pgrep chromium >/dev/null 2>&1; then
+  rm -f "$HOME"/.config/chromium/Singleton*
+fi
+
+exec "$BIN" \
+  --no-first-run \
+  --no-default-browser-check \
+  --password-store=basic \
+  --no-sandbox \
+  --test-type \
+  --disable-dev-shm-usage \
+  --disable-gpu \
+  --disable-extensions \
+  --disable-sync \
+  --disable-background-networking \
+  --disable-component-update \
+  --disable-domain-reliability \
+  --disable-features=BackForwardCache,MediaRouter,OptimizationHints,Translate,AutofillServerCommunication \
+  --renderer-process-limit=1 \
+  --process-per-site \
+  --disk-cache-size=67108864 \
+  --media-cache-size=33554432 \
+  --js-flags=--max-old-space-size=256 \
+  "$@"
