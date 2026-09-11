@@ -1,11 +1,11 @@
 # Orbit Cloud Linux
 
-A polished browser portal for a **remotely hosted Ubuntu MATE desktop**. The frontend deploys to Vercel; Linux and every desktop application run inside a separate Docker host.
+A polished browser portal for a **remotely hosted lightweight Alpine MATE desktop**. The frontend deploys to Vercel; Linux and every desktop application run inside a separate Docker host.
 
 ## Architecture
 
 - **Vercel:** static portal and a tiny configuration endpoint.
-- **Remote Docker host:** Ubuntu MATE via LinuxServer Webtop/Selkies.
+- **Remote Docker host:** Alpine MATE via LinuxServer Webtop/Selkies.
 - **Browser:** receives the desktop stream and sends keyboard, mouse, audio, and controller input.
 
 This is not a VM running inside Vercel or inside the visitor's browser.
@@ -22,7 +22,7 @@ PASSWORD=choose-a-long-random-password
 TZ=Australia/Sydney
 ```
 
-Attach persistent storage at `/config`, allocate at least 2 GB RAM, and expose internal port `3000` through the host's HTTPS domain. For smoother desktop use, 4 GB RAM or more is recommended. GPU-backed gaming requires a host that supports GPU passthrough; ordinary cloud containers are intended only for lightweight games.
+Attach persistent storage at `/config`, allocate at least 1 GB RAM, and expose internal port `3000` through the host's HTTPS domain. The included low-memory browser profile is intended for 1 GB services; 2–4 GB is recommended for smoother browsing. GPU-backed gaming requires a host that supports GPU passthrough; ordinary cloud containers are intended only for lightweight games.
 
 ## 2. Deploy the portal to Vercel
 
